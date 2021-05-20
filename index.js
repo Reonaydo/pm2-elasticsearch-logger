@@ -10,7 +10,6 @@ pmx.initModule({}, (err, conf) => {
 
     const config = {
         index: conf.index || 'pm2',
-        type: conf.type || 'pm2',
         host: conf.host || os.hostname(),
         elasticUrl: conf.elasticUrl || 'http://localhost:9200',
         insecure: conf.insecure || false
@@ -36,8 +35,8 @@ pmx.initModule({}, (err, conf) => {
         const date = d.getDate();
         if (date !== currentDate) {
             const index = config.index + '-' + d.getFullYear() + '.' + ('0' + (d.getMonth() + 1)).substr(-2) + '.' + ('0' + date).substr(-2);
-            console.log('sending logs to', config.elasticUrl + '/' + index + '/' + config.type);
-            url = config.elasticUrl + '/' + index + '/' + config.type + '/';
+            console.log('sending logs to', config.elasticUrl + '/' + index + '/_doc');
+            url = config.elasticUrl + '/' + index + '/_doc';
             currentDate = date;
         }
 
