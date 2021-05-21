@@ -12,7 +12,8 @@ pmx.initModule({}, (err, conf) => {
         index: conf.index || 'pm2',
         host: conf.host || os.hostname(),
         elasticUrl: conf.elasticUrl || 'http://localhost:9200',
-        insecure: conf.insecure || false
+        insecure: conf.insecure || false,
+        disabled: conf.disabled || false
     };
 
     let url;
@@ -58,17 +59,19 @@ pmx.initModule({}, (err, conf) => {
         if (err) {
             console.error('error on launching pm2 bus', err.message);
         }
+        if (!config.disabled) {
 
-        bus.on('log:err', data => {
-            if (data.process.name !== 'pm2-elasticsearch-logger') {
-                log('stderr', data);
-            }
-        });
-
-        bus.on('log:out', data => {
-            if (data.process.name !== 'pm2-elasticsearch-logger') {
-                log('stdout', data);
-            }
-        });
+            bus.on('log:err', data => {
+                if (data.process.name !== 'pm2-elasticsearch-logger') {
+                    log('stderr', data);
+                }
+            });
+    
+            bus.on('log:out', data => {
+                if (data.process.name !== 'pm2-elasticsearch-logger') {
+                    log('stdout', data);
+                }
+            });
+        };
     });
 });
